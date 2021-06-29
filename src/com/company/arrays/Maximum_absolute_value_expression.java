@@ -33,71 +33,20 @@ public class Maximum_absolute_value_expression {
 
     // O(n) approach -> Simplyfying the expression
     public static int maxAbsValExpOptimized(int[] arr1, int[] arr2) {
-        ArrayList<Integer> arrayList1 = new ArrayList<Integer>();
-        ArrayList<Integer> arrayList2 = new ArrayList<Integer>();
-        ArrayList<Integer> arrayList3 = new ArrayList<Integer>();
-        ArrayList<Integer> arrayList4 = new ArrayList<Integer>();
-
-        for (int i=0; i < arr1.length; i++) {
-            /*
-             * Case 1 -> when
-             * arr1[i] - arr1[j] > 0 && arr2[i] - arr2[j] > 0 && i - j > 0
-             * */
-            int case1 = 0;
-            case1 = arr1[i] + arr2[i] + i;
-            arrayList1.add(case1);
-
-            /*
-             * Case 2 -> when
-             * arr1[i] - arr1[j] < 0 && arr2[i] - arr2[j] > 0 && i - j > 0
-             * */
-            int case2 = 0;
-            case2 = arr1[i] - arr2[i] - i;
-            arrayList2.add(case2);
-
-            /*
-             * Case 3 -> when
-             * arr1[i] - arr1[j] > 0 && arr2[i] - arr2[j] > 0 && i - j < 0
-             * */
-            int case3 = 0;
-            case3 = arr1[i] + arr2[i] - i;
-            arrayList3.add(case3);
-
-            /*
-             * Case 1 -> when
-             * arr1[i] - arr1[j] < 0 && arr2[i] - arr2[j] > 0 && i - j < 0
-             * */
-            int case4 = 0;
-            case4 = arr1[i] - arr2[i] + i;
-            arrayList4.add(case4);
+        int[] signs = new int[] {-1, 1};
+        int best = 0;
+        for (int s1 : signs) {
+            for (int s2 : signs) {
+                int min = Integer.MAX_VALUE;
+                int max = Integer.MIN_VALUE;
+                for (int i = 0; i < arr1.length; i++) {
+                    int val = s1 * arr1[i] + s2 * arr2[i] + i;
+                    min = Math.min(val, min);
+                    max = Math.max(val, max);
+                }
+                best = Math.max(max - min, best);
+            }
         }
-
-        int result1 = Math.max(
-                findMax(arrayList1) - findMin(arrayList1),
-                findMax(arrayList2) - findMin(arrayList2)
-        );
-
-        int result2 = Math.max(
-                findMax(arrayList3) - findMin(arrayList3),
-                findMax(arrayList4) - findMin(arrayList4)
-        );
-
-        return Math.max(result1, result2);
-    }
-
-    public static int findMax(ArrayList<Integer> arr) {
-        int max = 0;
-        for (Integer el: arr) {
-            if (el > max) max = el;
-        }
-        return max;
-    }
-
-    public static int findMin(ArrayList<Integer> arr) {
-        int min = 0;
-        for (Integer el: arr) {
-            if (el < min) min = el;
-        }
-        return min;
+        return best;
     }
 }

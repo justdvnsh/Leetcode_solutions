@@ -1,5 +1,7 @@
 package com.company.arrays;
 
+import java.util.Arrays;
+
 public class maximum_gap {
     public static void main(String[] args) {
         int[] arr1 = {3,6,9,1};
@@ -14,16 +16,32 @@ public class maximum_gap {
     }
 
     public static int maxGap(int[] nums) {
-        int gap = 0;
-        if (nums.length == 1) return 0;
-        if (nums.length == 2) return nums[1] - nums[0];
-        for (int i = 0; i <= nums.length - 2; i++) {
-            System.out.println("nums[i + 1] = " + nums[i + 1] + " nums[i] = " + nums[i]);
-            if (nums[i + 1] - nums[i] > gap) gap = nums[i + 1] - nums[i];
+        int min = nums[0], max = nums[0], n = nums.length;
+        for (int x : nums) {
+            min = Math.min(min, x);
+            max = Math.max(max, x);
         }
-        for (int i = nums.length - 1; i > 0; i--) {
-            if (nums[i - 1] - nums[i] > gap) gap = nums[i - 1] - nums[i];
+        if (min == max) return 0;
+        // since max gap can be >= Math.ceil((double) (max - min) / (n - 1))
+        int bucketSize = (int) Math.ceil((double) (max - min) / (n - 1));
+        // creating n buckets with each bucket of size bucketSize
+        int[] minBucket = new int[n];
+        int[] maxBucket = new int[n];
+        Arrays.fill(minBucket, Integer.MIN_VALUE);
+        Arrays.fill(maxBucket, Integer.MAX_VALUE);
+        for (int x : nums) {
+            int idx = (x - min) / bucketSize;
+            minBucket[idx] = Math.min(x, minBucket[idx]);
+            maxBucket[idx] = Math.max(x, maxBucket[idx]);
         }
-        return gap;
+        int maxGap = bucketSize;
+        int prev = maxBucket[0];
+        for (int i = 0; i < n; i++) {
+            if (minBucket[i] == Integer.MIN_VALUE) continue;
+            maxGap = Math.max(maxGap, minBucket[i] - prev);
+            prev = maxBucket[i];
+        }
+
+        return maxGap;
     }
 }
