@@ -8,19 +8,22 @@ public class Excel_sheet_column_title {
         System.out.println(convertToTitle(2));
         System.out.println(convertToTitle(26));
         System.out.println(convertToTitle(27));
+        System.out.println(convertToTitle(28));
         System.out.println(convertToTitle(701));
         System.out.println(convertToTitle(2147483647));
     }
 
-    public static String convertToTitle(int colNum) {
-        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        int num = colNum;
-        String result = "";
-        while(num/26 > 0) {
-            if (num%26 > 0) result = letters.charAt(num % 26 - 1) + result;
-            else result = 'Z' + result;
-            num = (int) (Math.ceil(num/26) - 1);
+    public static String convertToTitle(int columnNumber) {
+        StringBuilder sb = new StringBuilder();
+        while(columnNumber > 26) {
+            int n = columnNumber % 26;
+
+            if (n==0) n = 26;
+            sb.append((char)('A' + n-1));
+
+            columnNumber = (columnNumber - n)/26;
         }
-        return result;
+        sb.append((char)('A' + columnNumber - 1));
+        return sb.reverse().toString();
     }
 }
