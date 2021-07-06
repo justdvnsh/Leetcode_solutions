@@ -8,6 +8,6 @@ public class Subsets {
     }
 
     public static void subsets(int[] nums) {
-        
+
     }
 }
